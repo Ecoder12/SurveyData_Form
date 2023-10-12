@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Survey Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      background-color: #007bff8a;
+      color: white;
+      padding: 10px;
+    }
+
+    form {
+      width: 50%;
+      margin: 0 auto;
+      text-align: left;
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+
+   
+    input {
+      display: block;
+      margin: 10px 0;
+      width: 80%;
+      padding: 10px;
+      border: 1px solid #097bff73;
+      border-radius: 4px;
+    }
+
+    select{
+      display: block;
+      margin: 10px 0;
+      width: 83%;
+      padding: 10px;
+      border: 1px solid #097bff73;
+      border-radius: 4px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    select {
+      appearance: none;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Survey Form</h1>
+  <form method="POST" action="/submit" >
+    <label for="timestamp">Timestamp:</label>
+    <input type="text" name="timestamp" id="timestamp" readonly>
+
+    <label for="mobile_number">Mobile Number:</label>
+    <input type="text" name="mobile_number" id="mobile_number" required>
+
+    <label for="mobile">MOBILE:</label>
+    <input type="text" name="mobile" id="mobile" required>
+
+    <label for="gender">Gender:</label>
+    <select name="gender" id="gender" required>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="residence">क्या आप राजस्थान के रहने वाले हैं?</label>
+    <select name="residence" id="residence" required>
+      <option value="Yes">हाँ</option>
+      <option value="No">नहीं</option>
+    </select>
+
+    <label for="constituency">आप कौन सी विधानसभा क्षेत्र में रहते हैं / आपका विधानसभा क्षेत्र का नाम
+      क्या है?</label>
+    <input type="text" name="constituency" id="constituency" required>
+
+    <label for="urban_or_rural">आप शहरी क्षेत्र में रहते हैं या ग्रामीण क्षेत्र में?</label>
+    <select name="urban_or_rural" id="urban_or_rural" required>
+      <option value="Urban">शहरी</option>
+      <option value="Rural">ग्रामीण</option>
+    </select>
+
+    <label for="upcoming_election_party">राजस्थान में अभी चुनाव होने वाला है, तो क्या आप मुझे
+      बताएंगे कि आने वाले विधानसभा चुनाव में आप किस पार्टी को वोट देंगे?</label>
+    <input type="text" name="upcoming_election_party" id="upcoming_election_party" required>
+
+    <label for="party_2018">2018 में जो विधानसभा चुनाव हुआ था, उसमें आपने कौन सी पार्टी को
+      वोट दिया था?</label>
+    <input type="text" name="party_2018" id="party_2018" required>
+
+    <label for="satisfaction_with_cm">क्या आप अपनी वर्तमान सरकार (CM Ashok Gehlot) द्वारा किए जा रहे
+      काम से खुश हैं?</label>
+    <select name="satisfaction_with_cm" id="satisfaction_with_cm" required>
+      <option value="Yes">हाँ</option>
+      <option value="No">नहीं</option>
+    </select>
+
+    <label for="satisfaction_with_mla">क्या आप अपने विधानसभा क्षेत्र के विधायक के काम से खुश हैं?</label>
+    <select name="satisfaction_with_mla" id="satisfaction_with_mla" required>
+      <option value="Yes">हाँ</option>
+      <option value="No">नहीं</option>
+    </select>
+
+    <label for="occupation">आप कौन से काम के साथ हैं / आप क्या काम करते हैं?</label>
+    <input type="text" name="occupation" id="occupation" required>
+
+    <label for="caste">आपकी जाति क्या है?</label>
+    <input type="text" name="caste" id="caste" required>
+
+    <label for="agent_id">Agent_ID</label>
+    <input type="text" name="agent_id" id="agent_id" required>
+
+    <label for="remarks">Remarks (if any)</label>
+    <input type="text" name="remarks" id="remarks" required>
+
+    <button type="submit" id="submitButton">Submit</button>
+
+  </form>
+
+  <script>
+
+  document.getElementById("timestamp").value = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+  // Function to display a message when the Submit button is clicked
+  document.getElementById("submitButton").addEventListener("click", function () {
+    alert("Thank you for submitting the form!");
+  });
+
+
+    document.getElementById("timestamp").value = new Date().toISOString().slice(0, 19).replace("T", " ");
+  </script>
+
+  
+</body>
+
+</html>
