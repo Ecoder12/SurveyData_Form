@@ -26,12 +26,10 @@ app.get('/', (req, res) => {
 
 app.post('/submit', async (req, res) => {
   const { 
-    timestamp, 
-    mobile_number, 
-    mobile, 
+    timestamp,
+    Constituency,
+    mobile_number,  
     gender, 
-    residence, // Add the new fields here
-    constituency,
     urban_or_rural,
     upcoming_election_party,
     party_2018,
@@ -47,11 +45,9 @@ app.post('/submit', async (req, res) => {
     await sql.connect(config);
     const request = new sql.Request();
     request.input('timestamp', sql.NVarChar, timestamp);
+    request.input('Constituency', sql.NVarChar, Constituency);
     request.input('mobile_number', sql.VarChar, mobile_number);
-    request.input('mobile', sql.VarChar, mobile);
     request.input('gender', sql.NVarChar, gender);
-    request.input('residence', sql.NVarChar, residence); // Add the new fields here
-    request.input('constituency', sql.NVarChar, constituency);
     request.input('urban_or_rural', sql.NVarChar, urban_or_rural);
     request.input('upcoming_election_party', sql.NVarChar, upcoming_election_party);
     request.input('party_2018', sql.NVarChar, party_2018);
@@ -64,12 +60,10 @@ app.post('/submit', async (req, res) => {
 
     const query = `
       INSERT INTO SurveyData_form (
-        Timestamp, 
+        Timestamp,
+        Constituency,
         Mobile_Number, 
-        MOBILE, 
         Gender, 
-        Residence, 
-        Constituency, 
         Urban_or_Rural, 
         Upcoming_Election_Party, 
         Party_2018, 
@@ -81,12 +75,10 @@ app.post('/submit', async (req, res) => {
         Remarks_if_any
       ) 
       VALUES (
-        @timestamp, 
+        @timestamp,
+        @Constituency,
         @mobile_number, 
-        @mobile, 
-        @gender, 
-        @residence, 
-        @constituency, 
+        @gender,
         @urban_or_rural, 
         @upcoming_election_party, 
         @party_2018, 
