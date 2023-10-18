@@ -74,9 +74,9 @@
     <label for="timestamp">Timestamp:</label>
     <input type="text" name="timestamp" id="timestamp" readonly>
 
-    <label for="Constituency">Select Your Assembly</label>
+    <!-- <label for="Constituency">Select Your Assembly</label>
     <select name="Constituency" id="Constituency" required>
-      <option value="1">SADULSHAHAR</option>
+    <option value="1">SADULSHAHAR</option>
     <option value="2">GANGA NAGAR</option>
     <option value="3">KARANPUR</option>
     <option value="4">SURATGARH</option>
@@ -276,7 +276,14 @@
     <option value="198">JHALRAPATAN</option>
     <option value="199">KHANPUR</option>
     <option value="200">MANOHAR THANA</option>
-    </select>
+    </select> -->
+
+    <label for="Constituency">Select Your Assembly</label>
+<select name="Constituency" id="Constituency" required>
+</select>
+
+
+
 
     <label for="mobile_number">Mobile Number:</label>
     <input type="text" name="mobile_number" id="mobile_number" required oninput="validateMobileNumber(this)">
@@ -486,6 +493,22 @@
       }
     }
     </script>
+    <script>
+      fetch('/get_constituency_options')
+          .then(response => response.json())
+          .then(options => {
+              const select = document.getElementById('Constituency');
+              options.forEach(option => {
+                  const optionElement = document.createElement('option');
+                  optionElement.value = option.value;
+                  optionElement.text = option.name;
+                  select.appendChild(optionElement);
+              });
+          })
+          .catch(error => {
+              console.error('Error fetching options: ', error);
+          });
+  </script>
 </body>
 
 </html>
