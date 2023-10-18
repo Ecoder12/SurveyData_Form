@@ -188,6 +188,25 @@ app.get('/get_constituency_options', async (req, res) => {
 });
 
 
+app.get('/get_all_constituency', async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Query the database
+    const result = await sql.query`SELECT value, name FROM ConstituencyOptions`;
+
+    // Send the JSON response
+    res.json(result.recordset);
+  } catch (err) {
+    console.error('Error fetching options:', err);
+    res.status(500).json({ error: 'An error occurred while fetching data.' });
+  } finally {
+    sql.close();
+  }
+});
+
+
 app.get('/update', async (req, res) => {
   try {
     // Get the 'constituency' parameter from the query string
