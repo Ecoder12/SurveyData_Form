@@ -285,41 +285,118 @@
     <select name="gender" id="gender" required>
       <option value="Male">Male</option>
       <option value="Female">Female</option>
-      <option value="Other">Other</option>
+      <option value="Phone Disconnected">Phone Disconnected</option>
     </select>
 
     <label for="urban_or_rural">आप शहरी क्षेत्र में रहते हैं या ग्रामीण क्षेत्र में?</label>
     <select name="urban_or_rural" id="urban_or_rural" required>
-      <option value="Urban">शहरी</option>
-      <option value="Rural">ग्रामीण</option>
+      <option value="Urban">Urban</option>
+      <option value="Rural">Rural</option>
+      <option value="Do not Know ">Do not Know</option>
+      <option value="Phone Disconnected">Phone Disconnected</option>
     </select>
 
     <label for="upcoming_election_party">राजस्थान में अभी चुनाव होने वाला है, तो क्या आप मुझे
       बताएंगे कि आने वाले विधानसभा चुनाव में आप किस पार्टी को वोट देंगे?</label>
-    <input type="text" name="upcoming_election_party" id="upcoming_election_party" required>
+    <!-- <input type="text" name="upcoming_election_party" id="upcoming_election_party" required> -->
+    <select name="upcoming_election_party" id="upcoming_election_party" required>
+      <option value="Phone Disconnected">Phone Disconnected</option>
+      <option value="Do Not Want To Answer">Do Not Want To Answer</option>
+      <option value="Bahujan Samaj Party (BSP)">Bahujan Samaj Party (BSP)</option>
+      <option value="Aam Aadmi Party (AAP)">Aam Aadmi Party (AAP)</option>
+      <option value="Indian National Congress (INC)">Indian National Congress (INC)</option>
+      <option value="Bharatiya Janta Party (BJP)">Bharatiya Janta Party (BJP)</option>
+      <option value="Others">Others</option>
+    </select>
 
     <label for="party_2018">2018 में जो विधानसभा चुनाव हुआ था, उसमें आपने कौन सी पार्टी को
       वोट दिया था?</label>
-    <input type="text" name="party_2018" id="party_2018" required>
+    <!-- <input type="text" name="party_2018" id="party_2018" required> -->
+    <select name="party_2018" id="party_2018" required>
+      <option value="Phone Disconnected">Phone Disconnected</option>
+      <option value="Do Not Want To Answer">Do Not Want To Answer</option>
+      <option value="Did not Vote">Did not Vote</option>
+      <option value="Others Party">Others Party</option>
+      <option value="Bharatiya Janta Party (BJP)">Bharatiya Janta Party (BJP)</option>
+      <option value="Indian National Congress (INC)">Indian National Congress (INC)</option>
+    </select>
 
     <label for="satisfaction_with_cm">क्या आप अपनी वर्तमान सरकार (CM Ashok Gehlot) द्वारा किए जा रहे
       काम से खुश हैं?</label>
     <select name="satisfaction_with_cm" id="satisfaction_with_cm" required>
-      <option value="Yes">हाँ</option>
-      <option value="No">नहीं</option>
+      <option value="Phone Disconnected">Phone Disconnected</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+      <option value="Do not want to answer">Do not want to answer</option>
     </select>
 
     <label for="satisfaction_with_mla">क्या आप अपने विधानसभा क्षेत्र के विधायक के काम से खुश हैं?</label>
     <select name="satisfaction_with_mla" id="satisfaction_with_mla" required>
-      <option value="Yes">हाँ</option>
-      <option value="No">नहीं</option>
+      <option value="Phone Disconnected">Phone Disconnected</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+      <option value="Do not want to answer">Do not want to answer</option>
     </select>
 
     <label for="occupation">आप कौन से काम के साथ हैं / आप क्या काम करते हैं?</label>
-    <input type="text" name="occupation" id="occupation" required>
+    <div id="occupationField">
+      <select name="occupation" id="occupation" required onchange="toggleOtherField()">
+        <option value="Phone Disconnected">Phone Disconnected</option>
+        <option value="Do not want to answer">Do not want to answer</option>
+        <option value="Farmer">Farmer</option>
+        <option value="Student">Student</option>
+        <option value="Businessman">Businessman</option>
+        <option value="Labour / Daily Worker/Mechanic">Labour / Daily Worker/Mechanic</option>
+        <option value="Private Employee">Private Employee</option>
+        <option value="Shopkeeper / Small Shop Owner">Shopkeeper / Small Shop Owner</option>
+        <option value="Unemployed">Unemployed</option>
+        <option value="Teacher / Professor">Teacher / Professor</option>
+        <option value="Government Employee">Government Employee</option>
+        <option value="Driver">Driver</option>
+        <option value="Housewife">Housewife</option>
+        <option value="Retired Person">Retired Person</option>
+        <option value="Others">Others</option>
+      </select>
+    </div>
+    
+    <div id="otherOccupationField" style="display: none;">
+      <label for="otherOccupation">Other Occupation:</label>
+      <input type="text" name="otherOccupation" id="otherOccupation">
+    </div>
+    
+
+    
 
     <label for="caste">आपकी जाति क्या है?</label>
-    <input type="text" name="caste" id="caste" required>
+    <!-- <input type="text" name="caste" id="caste" required> -->
+
+    <div id="casteField">
+      <select name="caste" id="caste" required onchange="toggleOthercasteField()">
+        <option value="Phone Disconnected">Phone Disconnected</option>
+        <option value="Do not want to answer">Do not want to answer</option>
+        <option value="Brahmin / Pandit / Sharma / Jangid">Brahmin / Pandit / Sharma / Jangid</option>
+        <option value="Gurjar">Gurjar</option>
+        <option value="Muslim">Muslim</option>
+        <option value="Meena">Meena</option>
+        <option value="Agrawal / Bania / Mahajan / Jain">Agrawal / Bania / Mahajan / Jain</option>
+        <option value="Jaat">Jaat</option>
+        <option value="Kumawat / Kumhar / Prajapat">Kumawat / Kumhar / Prajapat</option>
+        <option value="Rajput">Rajput</option>
+        <option value="Sikh">Sikh</option>
+        <option value="Meghwal">Meghwal</option>
+        <option value="Regar / Raigar">Regar / Raigar</option>
+        <option value="Ahir / Aheer / Yadav">Ahir / Aheer / Yadav</option>
+        <option value="Others">Others</option>
+      </select>
+    </div>
+    
+    <div id="othercasteField" style="display: none;">
+      <label for="othercaste">Other Occupation:</label>
+      <input type="text" name="othercaste" id="othercaste">
+    </div>
+
+
+
 
     <label for="agent_id">Agent_ID</label>
     <input type="text" name="agent_id" id="agent_id" required>
@@ -344,6 +421,45 @@
     document.getElementById("timestamp").value = new Date().toISOString().slice(0, 19).replace("T", " ");
   </script>
 
+<script>
+  function toggleOtherField() {
+    var occupationSelect = document.getElementById("occupation");
+    var occupationField = document.getElementById("occupationField");
+    var otherOccupationField = document.getElementById("otherOccupationField");
+    var otherOccupationInput = document.getElementById("otherOccupation");
+  
+    if (occupationSelect.value === "Others") {
+      occupationField.style.display = "none";
+      otherOccupationField.style.display = "block";
+      otherOccupationInput.setAttribute("required", "required");
+    } else {
+      occupationField.style.display = "block";
+      otherOccupationField.style.display = "none";
+      otherOccupationInput.removeAttribute("required");
+      otherOccupationInput.value = null; // Set the default value to null when not "Others" is selected
+    }
+  }
+  </script>
+
+<script>
+  function toggleOthercasteField() {
+    var occupationSelect = document.getElementById("caste");
+    var occupationField = document.getElementById("casteField");
+    var otherOccupationField = document.getElementById("othercasteField");
+    var otherOccupationInput = document.getElementById("othercaste");
+  
+    if (occupationSelect.value === "Others") {
+      occupationField.style.display = "none";
+      otherOccupationField.style.display = "block";
+      otherOccupationInput.setAttribute("required", "required");
+    } else {
+      occupationField.style.display = "block";
+      otherOccupationField.style.display = "none";
+      otherOccupationInput.removeAttribute("required");
+      otherOccupationInput.value = null; 
+    }
+  }
+  </script>
   
 </body>
 

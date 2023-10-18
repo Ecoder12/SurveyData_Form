@@ -35,11 +35,29 @@ app.post('/submit', async (req, res) => {
     party_2018,
     satisfaction_with_cm,
     satisfaction_with_mla,
-    occupation,
-    caste,
     agent_id,
     remarks,
   } = req.body;
+
+console.log(req.body.otherOccupation);
+
+const otherOccupation = req.body.otherOccupation;
+
+const othercaste = req.body.othercaste;
+
+if (otherOccupation === undefined || otherOccupation === ''){
+var occupation = req.body.occupation;
+}else {
+  var occupation = otherOccupation;
+}
+
+if (othercaste === undefined || othercaste === '')
+{
+  var caste = req.body.caste;
+  }else {
+    var caste = othercaste;
+  }
+
 
   try {
     await sql.connect(config);
