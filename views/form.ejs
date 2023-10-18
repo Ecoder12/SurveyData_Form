@@ -279,7 +279,11 @@
     </select>
 
     <label for="mobile_number">Mobile Number:</label>
-    <input type="text" name="mobile_number" id="mobile_number" required>
+    <input type="text" name="mobile_number" id="mobile_number" required oninput="validateMobileNumber(this)">
+    <span id="mobile_number_error" style="color: red;"></span>
+    
+   
+    
 
     <label for="gender">Gender:</label>
     <select name="gender" id="gender" required>
@@ -460,7 +464,28 @@
     }
   }
   </script>
-  
+  <script>
+    function validateMobileNumber(input) {
+      // Remove any non-numeric characters
+      input.value = input.value.replace(/\D/g, '');
+    
+      var mobileNumber = input.value;
+    
+      // Ensure the length does not exceed 15 characters
+      if (mobileNumber.length > 15) {
+        input.value = mobileNumber.slice(0, 15); // Trim to a maximum of 15 characters
+      }
+    
+      // Check if the length is less than 10
+      if (mobileNumber.length < 10) {
+        document.getElementById("mobile_number_error").textContent = "Mobile number must be at least 10 digits.";
+        input.setCustomValidity("Mobile number must be at least 10 digits.");
+      } else {
+        document.getElementById("mobile_number_error").textContent = "";
+        input.setCustomValidity(""); // Clear the validation message
+      }
+    }
+    </script>
 </body>
 
 </html>
