@@ -165,7 +165,7 @@ app.get('/constituency', async (req, res) => {
     sql.close();
   }
 });
-
+ 
 
 
 // Route to fetch constituency options
