@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Survey Data Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f5ff;
+            /* Light blue background */
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            /* White table background */
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #ebf0ff;
+            /* Light blue alternate row background */
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                border: 0;
+            }
+
+            tr {
+                margin-bottom: 10px;
+                display: block;
+                border: 1px solid #ccc;
+            }
+
+            td {
+                border: none;
+                border-bottom: 1px solid #ccc;
+                position: relative;
+                padding-left: 50%;
+                background-color: #ebf0ff;
+                /* Light blue alternate row background */
+            }
+
+            td:before {
+                position: absolute;
+                left: 6px;
+                content: attr(data-label);
+                background-color: #a1c8ff;
+                /* Light blue header background */
+                color: white;
+            }
+        }
+        h1 {
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Response</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Serial No</th> <!-- Add a new column for Serial No -->
+                    <th data-label="ID">ID</th>
+                    <th data-label="Timestamp">Timestamp</th>
+                    <th data-label="Mobile Number">Mobile Number</th>
+                    <th data-label="Gender">Gender</th>
+                    <th data-label="Urban or Rural">Urban or Rural</th>
+                    <th data-label="Upcoming Election Party">Upcoming Election Party</th>
+                    <th data-label="Party 2018">Party 2018</th>
+                    <th data-label="Satisfaction with CM">Satisfaction with CM</th>
+                    <th data-label="Satisfaction with MLA">Satisfaction with MLA</th>
+                    <th data-label="Occupation">Occupation</th>
+                    <th data-label="Caste">Caste</th>
+                    <th data-label="Agent ID">Agent ID</th>
+                    <th data-label="Remarks (if any)">Remarks (if any)</th>
+                    <th data-label="Action">Action</th> <!-- Add a new column for the Delete button -->
+                </tr>
+            </thead>
+            <tbody>
+                <% data.forEach(function(entry, index) { %>
+                    <tr>
+                        <td>
+                            <%= index + 1 %>
+                        </td> <!-- Serial number starts from 1 -->
+                        <td data-label="ID">
+                            <%= entry.Id %>
+                        </td>
+                        <td data-label="Timestamp">
+                            <%= entry.Timestamp %>
+                        </td>
+                        <td data-label="Mobile Number">
+                            <%= entry.Mobile_Number %>
+                        </td>
+                        <td data-label="Gender">
+                            <%= entry.Gender %>
+                        </td>
+                        <td data-label="Urban or Rural">
+                            <%= entry.Urban_or_Rural %>
+                        </td>
+                        <td data-label="Upcoming Election Party">
+                            <%= entry.Upcoming_Election_Party %>
+                        </td>
+                        <td data-label="Party 2018">
+                            <%= entry.Party_2018 %>
+                        </td>
+                        <td data-label="Satisfaction with CM">
+                            <%= entry.Satisfaction_with_CM %>
+                        </td>
+                        <td data-label="Satisfaction with MLA">
+                            <%= entry.Satisfaction_with_MLA %>
+                        </td>
+                        <td data-label="Occupation">
+                            <%= entry.Occupation %>
+                        </td>
+                        <td data-label="Caste">
+                            <%= entry.Caste %>
+                        </td>
+                        <td data-label="Agent ID">
+                            <%= entry.Agent_ID %>
+                        </td>
+                        <td data-label="Remarks (if any)">
+                            <%= entry.Remarks_if_any %>
+                        </td>
+                        <td data-label="Action">
+                            <form action="/deleteSurveyData" method="POST">
+                                <input type="hidden" name="id" value="<%= entry.Id %>">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

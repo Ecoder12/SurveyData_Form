@@ -31,6 +31,12 @@ app.get('/', (req, res) => {
   res.render('form');
 });
 
+
+app.get('/survey-form', (req, res) => {
+  res.render('form');
+});
+
+
 app.post('/submit', async (req, res) => {
   const {
     timestamp,
@@ -146,6 +152,8 @@ app.get('/SurveyData', async (req, res) => {
 });
 
 
+
+
 app.get('/constituency', async (req, res) => {
 
 
@@ -165,7 +173,45 @@ app.get('/constituency', async (req, res) => {
     sql.close();
   }
 });
- 
+
+app.get('/response', async (req, res) => {
+  try {
+    await sql.connect(config);
+    const request = new sql.Request();
+
+    const query = `select * from SurveyData_form`;
+
+    const result = await request.query(query);
+    console.log('Data Fetched Successfully', result);
+
+    // Render the EJS template and pass the data to it
+    res.render('surveyData.ejs', { data: result.recordset });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    sql.close();
+  }
+});
+
+
+app.get('/constituency-allocation', async (req, res) => {
+  try {
+    await sql.connect(config);
+    const request = new sql.Request();
+
+    const query = `SELECT value, name FROM ConstituencyOptions`;
+
+    const result = await request.query(query);
+    console.log('Data Fetched Successfully', result);
+
+    // Render the EJS template and pass the data to it
+    res.render('constituencyOptions.ejs', { data: result.recordset });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    sql.close();
+  }
+});
 
 
 // Route to fetch constituency options
@@ -194,7 +240,7 @@ app.get('/get_all_constituency', async (req, res) => {
     await sql.connect(config);
 
     // Query the database
-    const result = await sql.query`SELECT value, name FROM ConstituencyOptions`;
+    const result = await sql.query`SELECT value, name, is_active FROM ConstituencyOptions`;
 
     // Send the JSON response
     res.json(result.recordset);
@@ -236,7 +282,105 @@ app.get('/update', async (req, res) => {
 });
 
 
+app.post('/deleteSurveyData', async (req, res) => {
+  try {
+    const id = req.body.id;
 
+    console.log(id);
+
+    // Connect to the database
+    await sql.connect(config);
+
+    // Form the SQL query
+    const query = `DELETE FROM SurveyData_form where id = ${id}`;
+    console.log('SQL Query:', query);
+
+    // Update the 'is_active' flag for the specified constituencies
+    const result = await sql.query(query);
+
+    res.redirect('/response'); // Redirect back to the SurveyData page
+  } catch (error) {
+    console.error(error);
+    // Handle errors here
+  }
+});
+
+
+app.get('/constituency-allocation', async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Query the database
+    const result = await sql.query`SELECT value, name, is_active FROM ConstituencyOptions`;
+
+    // Render the EJS template with the data
+    res.render('constituency.ejs', { data: result.recordset });
+  } catch (err) {
+    console.error('Error fetching options:', err);
+    res.status(500).json({ error: 'An error occurred while fetching data.' });
+  } finally {
+    sql.close();
+  }
+});
+
+app.get('/constituency_allocate', async (req, res) => {
+  try {
+    await sql.connect(config);
+    const request = new sql.Request();
+
+    const query = `SELECT value, name, is_active FROM ConstituencyOptions`;
+
+    const result = await request.query(query);
+    console.log('Data Fetched Successfully', result);
+
+    // Render the EJS template and pass the data to it
+    res.render('constituency.ejs', { data: result.recordset });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    sql.close();
+  }
+});
+
+app.get('/dashboard', (req, res) => {
+  res.render('admin-panel');
+});
+
+
+// Handle login form submission
+app.post('/login', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  if (username === 'admin' && password === '123456') {
+    res.render('admin-panel.ejs');
+  } else {
+    res.send('Invalid login credentials. Please try again.');
+  }
+});
+
+
+
+
+
+app.get('/update/:value/:is_active', async (req, res) => {
+  try {
+    // Connect to the database
+    await sql.connect(config);
+
+    // Update the 'is_active' field in the database
+    await sql.query`UPDATE ConstituencyOptions SET is_active = ${req.params.is_active} WHERE value = ${req.params.value}`;
+
+    // Send a success response
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error updating data:', err);
+    res.status(500).json({ error: 'An error occurred while updating data.' });
+  } finally {
+    sql.close();
+  }
+});
 
 
 app.listen(port, () => {

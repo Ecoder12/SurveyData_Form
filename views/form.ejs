@@ -7,41 +7,40 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
+      background-color: #f0f0f0;
     }
 
     h1 {
-      background-color: #007bff8a;
+      background-color: #007bff;
       color: white;
       padding: 10px;
     }
 
     form {
-      width: 50%;
+      max-width: 600px;
       margin: 0 auto;
       text-align: left;
-      border: 1px solid #ddd;
+      background-color: white;
       padding: 20px;
       border-radius: 20px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     }
 
-
-   
     input {
       display: block;
       margin: 10px 0;
-      width: 80%;
+      width: 96%;
       padding: 10px;
-      border: 1px solid #097bff73;
+      border: 1px solid #007bff;
       border-radius: 4px;
     }
 
-    select{
+    select {
       display: block;
       margin: 10px 0;
-      width: 83%;
+      width: 100%;
       padding: 10px;
-      border: 1px solid #097bff73;
+      border: 1px solid #007bff;
       border-radius: 4px;
     }
 
@@ -70,7 +69,7 @@
 
 <body>
   <h1>Survey Form</h1>
-  <form method="POST" action="/submit" >
+  <form method="POST" action="/submit">
     <label for="timestamp">Timestamp:</label>
     <input type="text" name="timestamp" id="timestamp" readonly>
 
@@ -279,8 +278,8 @@
     </select> -->
 
     <label for="Constituency">Select Your Assembly</label>
-<select name="Constituency" id="Constituency" required>
-</select>
+    <select name="Constituency" id="Constituency" required>
+    </select>
 
 
 
@@ -288,9 +287,9 @@
     <label for="mobile_number">Mobile Number:</label>
     <input type="text" name="mobile_number" id="mobile_number" required oninput="validateMobileNumber(this)">
     <span id="mobile_number_error" style="color: red;"></span>
-    
-   
-    
+
+
+
 
     <label for="gender">Gender:</label>
     <select name="gender" id="gender" required>
@@ -369,14 +368,14 @@
         <option value="Others">Others</option>
       </select>
     </div>
-    
+
     <div id="otherOccupationField" style="display: none;">
       <label for="otherOccupation">Other Occupation:</label>
       <input type="text" name="otherOccupation" id="otherOccupation">
     </div>
-    
 
-    
+
+
 
     <label for="caste">आपकी जाति क्या है?</label>
     <!-- <input type="text" name="caste" id="caste" required> -->
@@ -400,7 +399,7 @@
         <option value="Others">Others</option>
       </select>
     </div>
-    
+
     <div id="othercasteField" style="display: none;">
       <label for="othercaste">Other Occupation:</label>
       <input type="text" name="othercaste" id="othercaste">
@@ -421,68 +420,68 @@
 
   <script>
 
-  document.getElementById("timestamp").value = new Date().toISOString().slice(0, 19).replace("T", " ");
+    document.getElementById("timestamp").value = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-  // Function to display a message when the Submit button is clicked
-  document.getElementById("submitButton").addEventListener("click", function () {
-    alert("Thank you for submitting the form!");
-  });
+    // Function to display a message when the Submit button is clicked
+    document.getElementById("submitButton").addEventListener("click", function () {
+      alert("Thank you for submitting the form!");
+    });
 
 
     document.getElementById("timestamp").value = new Date().toISOString().slice(0, 19).replace("T", " ");
   </script>
 
-<script>
-  function toggleOtherField() {
-    var occupationSelect = document.getElementById("occupation");
-    var occupationField = document.getElementById("occupationField");
-    var otherOccupationField = document.getElementById("otherOccupationField");
-    var otherOccupationInput = document.getElementById("otherOccupation");
-  
-    if (occupationSelect.value === "Others") {
-      occupationField.style.display = "none";
-      otherOccupationField.style.display = "block";
-      otherOccupationInput.setAttribute("required", "required");
-    } else {
-      occupationField.style.display = "block";
-      otherOccupationField.style.display = "none";
-      otherOccupationInput.removeAttribute("required");
-      otherOccupationInput.value = null; // Set the default value to null when not "Others" is selected
+  <script>
+    function toggleOtherField() {
+      var occupationSelect = document.getElementById("occupation");
+      var occupationField = document.getElementById("occupationField");
+      var otherOccupationField = document.getElementById("otherOccupationField");
+      var otherOccupationInput = document.getElementById("otherOccupation");
+
+      if (occupationSelect.value === "Others") {
+        occupationField.style.display = "none";
+        otherOccupationField.style.display = "block";
+        otherOccupationInput.setAttribute("required", "required");
+      } else {
+        occupationField.style.display = "block";
+        otherOccupationField.style.display = "none";
+        otherOccupationInput.removeAttribute("required");
+        otherOccupationInput.value = null; // Set the default value to null when not "Others" is selected
+      }
     }
-  }
   </script>
 
-<script>
-  function toggleOthercasteField() {
-    var occupationSelect = document.getElementById("caste");
-    var occupationField = document.getElementById("casteField");
-    var otherOccupationField = document.getElementById("othercasteField");
-    var otherOccupationInput = document.getElementById("othercaste");
-  
-    if (occupationSelect.value === "Others") {
-      occupationField.style.display = "none";
-      otherOccupationField.style.display = "block";
-      otherOccupationInput.setAttribute("required", "required");
-    } else {
-      occupationField.style.display = "block";
-      otherOccupationField.style.display = "none";
-      otherOccupationInput.removeAttribute("required");
-      otherOccupationInput.value = null; 
+  <script>
+    function toggleOthercasteField() {
+      var occupationSelect = document.getElementById("caste");
+      var occupationField = document.getElementById("casteField");
+      var otherOccupationField = document.getElementById("othercasteField");
+      var otherOccupationInput = document.getElementById("othercaste");
+
+      if (occupationSelect.value === "Others") {
+        occupationField.style.display = "none";
+        otherOccupationField.style.display = "block";
+        otherOccupationInput.setAttribute("required", "required");
+      } else {
+        occupationField.style.display = "block";
+        otherOccupationField.style.display = "none";
+        otherOccupationInput.removeAttribute("required");
+        otherOccupationInput.value = null;
+      }
     }
-  }
   </script>
   <script>
     function validateMobileNumber(input) {
       // Remove any non-numeric characters
       input.value = input.value.replace(/\D/g, '');
-    
+
       var mobileNumber = input.value;
-    
+
       // Ensure the length does not exceed 15 characters
       if (mobileNumber.length > 15) {
         input.value = mobileNumber.slice(0, 15); // Trim to a maximum of 15 characters
       }
-    
+
       // Check if the length is less than 10
       if (mobileNumber.length < 10) {
         document.getElementById("mobile_number_error").textContent = "Mobile number must be at least 10 digits.";
@@ -492,22 +491,22 @@
         input.setCustomValidity(""); // Clear the validation message
       }
     }
-    </script>
-    <script>
-      fetch('/get_constituency_options')
-          .then(response => response.json())
-          .then(options => {
-              const select = document.getElementById('Constituency');
-              options.forEach(option => {
-                  const optionElement = document.createElement('option');
-                  optionElement.value = option.value;
-                  optionElement.text = option.name;
-                  select.appendChild(optionElement);
-              });
-          })
-          .catch(error => {
-              console.error('Error fetching options: ', error);
-          });
+  </script>
+  <script>
+    fetch('/get_constituency_options')
+      .then(response => response.json())
+      .then(options => {
+        const select = document.getElementById('Constituency');
+        options.forEach(option => {
+          const optionElement = document.createElement('option');
+          optionElement.value = option.value;
+          optionElement.text = option.name;
+          select.appendChild(optionElement);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching options: ', error);
+      });
   </script>
 </body>
 

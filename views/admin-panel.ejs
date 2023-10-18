@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+      width: 300px;
+    }
+
+    .login-box h1 {
+      color: #007BFF;
+    }
+
+    .inputclass {
+    width: 87%;
+    height: 12%;
+    padding: 6px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.login-box  {
+    width: 100%;
+    padding: 6px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-box {
+    width: 30%;
+    height: 30%;
+    padding: 10px;
+    background: #ffffff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.content h1 {
+    color: #dce5ef;
+}
+
+#login {
+    align-items: left;
+    width: 17%;
+    height: 11%;
+    padding: 9px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+    .admin-panel {
+      display: none;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #007BFF;
+      color: white;
+      position: fixed;
+      height: 100%;
+      overflow: auto;
+    }
+
+    .sidebar a {
+      padding: 10px 15px;
+      text-decoration: none;
+      font-size: 16px;
+      color: white;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #0056b3;
+    }
+
+    .content {
+      margin-left: 260px;
+      padding: 20px;
+      width: 80%;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+    }
+
+    .content h1 {
+      color: #007BFF;
+    }
+
+    .show-admin-panel {
+      display: block;
+    }
+    .logout-button {
+    height: 29px;
+    width: 63px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff3333;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <h1>Login</h1>
+      <input class="inputclass" type="text" id="username" placeholder="Username">
+      <input class="inputclass" type="password" id="password" placeholder="Password">
+      <button id = "login"onclick="login()">Login</button>
+    </div>
+  </div>
+
+  <div class="admin-panel">
+    <button class="logout-button" onclick="logout()">Logout</button> <!-- Add the logout button here -->
+
+    <div class="sidebar">
+      <a href="javascript:void(0);" onclick="loadView('survey-form')">Survey Form</a>
+      <a href="javascript:void(0);" onclick="loadView('response')">Response Data</a>
+      <a href="javascript:void(0);" onclick="loadView('constituency_allocate')">Constituency Allocation</a>
+    </div>
+    <div class="content">
+      <div id="dynamic-content">
+        <!-- Content for each page will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (username === 'admin' && password === '123456') {
+        document.querySelector('.login-container').style.display = 'none';
+        document.querySelector('.admin-panel').classList.add('show-admin-panel');
+        loadView('response');
+      } else {
+        alert('Invalid username or password. Please try again.');
+      }
+    }
+
+    function loadView(viewName) {
+      const dynamicContent = document.getElementById('dynamic-content');
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          dynamicContent.innerHTML = this.responseText;
+        }
+      };
+      xhttp.open('GET', '/' + viewName, true);
+      xhttp.send();
+    }
+  </script>
+  <script>
+  
+    function logout() {
+      document.querySelector('.login-container').style.display = 'flex'; // Show the login container
+      document.querySelector('.admin-panel').classList.remove('show-admin-panel'); // Hide the admin panel
+    }
+  </script>
+  
+</body>
+
+</html>
