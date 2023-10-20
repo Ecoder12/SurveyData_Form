@@ -1,145 +1,250 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Constituency Options</title>
     <style>
-        /* Body styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
-    
-        /* Header styling */
-        h1 {
-            background-color: #3498db;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin: 0;
-        }
-    
-        /* Table styling */
+      /* Body styling */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Header styling */
+      h1 {
+        background-color: #3498db;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        margin: 0;
+      }
+
+      /* Table styling */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 8px;
+      }
+
+      th {
+        background-color: #3498db;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      /* Checkbox styling */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+
+      .slider:before {
+        position: absolute;
+        /* content: ""; */
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #3498db;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #3498db;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+
+      /* Make the table responsive */
+      @media (max-width: 600px) {
         table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          font-size: 12px;
         }
-    
-        th, td {
-            text-align: left;
-            padding: 8px;
-        }
-    
-        th {
-            background-color: #3498db;
-            color: white;
-        }
-    
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-    
-        /* Checkbox styling */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-    
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            -webkit-transition: .4s;
-            transition: .4s;
-            border-radius: 34px;
-        }
-    
-        .slider:before {
-            position: absolute;
-            /* content: ""; */
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-            border-radius: 50%;
-        }
-    
-        input:checked + .slider {
-            background-color: #3498db;
-        }
-    
-        input:focus + .slider {
-            box-shadow: 0 0 1px #3498db;
-        }
-    
-        input:checked + .slider:before {
-            -webkit-transform: translateX(26px);
-            -ms-transform: translateX(26px);
-            transform: translateX(26px);
-        }
-    
-        /* Make the table responsive */
-        @media (max-width: 600px) {
-            table {
-                font-size: 12px;
-            }
-        }
+      }
+      #pagination-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      #prev-button,
+      #next-button,
+      #page-numbers button {
+        background-color: #3498db;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        margin: 2px;
+        border-radius: 3px;
+      }
+
+      #prev-button,
+      #next-button {
+        background-color: #333;
+      }
+
+      #prev-button:hover,
+      #next-button:hover {
+        background-color: #555;
+      }
+
+      #page-numbers button:hover {
+        background-color: #555;
+      }
     </style>
-    
-</head>
-<body>
+  </head>
+  <body>
     <h1>Constituency Allocation</h1>
     <table>
-        <tr>
-            <th>Value</th>
-            <th>Name</th>
-            <th>Is Active</th>
-        </tr>
-        <% data.forEach((row) => { %>
-            <tr>
-                <td><%= row.value %></td>
-                <td><%= row.name %></td>
-                <td>
-                    <label class="switch">
-                        <input type="checkbox" data-value="<%= row.value %>" data-active="<%= row.is_active %>" <%= row.is_active == 1 ? 'checked' : '' %>
-                        <span class="slider round"></span>
-                    </label>
-                </td>
-            </tr>
-        <% }); %>
+      <tr>
+        <th>Value</th>
+        <th>Name</th>
+        <th>Is Active</th>
+      </tr>
+      <% data.forEach((row) => { %>
+      <tr>
+        <td><%= row.value %></td>
+        <td><%= row.name %></td>
+        <td>
+          <label class="switch">
+            <input type="checkbox" data-value="<%= row.value %>"
+            data-active="<%= row.is_active %>" <%= row.is_active == 1 ?
+            'checked' : '' %>
+            <span class="slider round"></span>
+          </label>
+        </td>
+      </tr>
+      <% }); %>
     </table>
-    <script>
-        document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-            checkbox.addEventListener('change', (event) => {
-                const value = event.target.getAttribute('data-value');
-                const active = event.target.checked ? 1 : 0;
+    <div id="pagination-container">
+      <button id="prev-button"><<</button>
+      <span id="page-numbers"></span>
+      <button id="next-button">>></button>
+    </div>
 
-                // Call the update API to change the 'is_active' value
-                fetch(`/update/${value}/${active}`, { method: 'GET' })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data.success) {
-                            // Update the UI or provide feedback as needed
-                            console.log(`Updated is_active for value ${value} to ${active}`);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error updating is_active:', error);
-                    });
-            });
+    <script>
+      const table = document.querySelector("table");
+      const tableRows = table.querySelectorAll("tr");
+      const rowsPerPage = 10;
+      let currentPage = 1;
+
+      function displayTable(page) {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        // Create HTML for the table rows to display
+        let tableHtml = "";
+        for (let i = start; i < end; i++) {
+          if (tableRows[i]) {
+            tableHtml += tableRows[i].outerHTML;
+          }
+        }
+
+        table.innerHTML = `
+                
+                ${tableHtml}
+            `;
+      }
+
+      function navigateToPage(page) {
+        if (page < 1) page = 1;
+        if (page > Math.ceil(tableRows.length / rowsPerPage))
+          page = Math.ceil(tableRows.length / rowsPerPage);
+        currentPage = page;
+        displayTable(currentPage);
+      }
+
+      displayTable(currentPage);
+
+      const paginationContainer = document.getElementById(
+        "pagination-container"
+      );
+      const totalPages = Math.ceil(tableRows.length / rowsPerPage);
+      const pageNumbers = document.getElementById("page-numbers");
+      const prevButton = document.getElementById("prev-button");
+      const nextButton = document.getElementById("next-button");
+
+      function updatePageNumbers() {
+        pageNumbers.innerHTML = "";
+        for (let i = 1; i <= totalPages; i++) {
+          const button = document.createElement("button");
+          button.innerText = i;
+          button.addEventListener("click", () => navigateToPage(i));
+          pageNumbers.appendChild(button);
+        }
+      }
+
+      updatePageNumbers();
+
+      prevButton.addEventListener("click", () => {
+        navigateToPage(currentPage - 1);
+      });
+
+      nextButton.addEventListener("click", () => {
+        navigateToPage(currentPage + 1);
+      });
+    </script>
+
+    <script>
+      document
+        .querySelectorAll('input[type="checkbox"]')
+        .forEach((checkbox) => {
+          checkbox.addEventListener("change", (event) => {
+            const value = event.target.getAttribute("data-value");
+            const active = event.target.checked ? 1 : 0;
+
+            // Call the update API to change the 'is_active' value
+            fetch(`/update/${value}/${active}`, { method: "GET" })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  // Update the UI or provide feedback as needed
+                  console.log(
+                    `Updated is_active for value ${value} to ${active}`
+                  );
+                }
+              })
+              .catch((error) => {
+                console.error("Error updating is_active:", error);
+              });
+          });
         });
     </script>
-</body>
+  </body>
 </html>
