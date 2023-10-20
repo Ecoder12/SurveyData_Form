@@ -15,7 +15,7 @@ const config = {
 };
 const app = express();
 const port = 8500;
-
+const bodyParser = require('body-parser');
 // Middleware to handle CORS (if needed)
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -343,21 +343,39 @@ app.get('/constituency_allocate', async (req, res) => {
   }
 });
 
-app.get('/dashboard', (req, res) => {
-  res.render('admin-panel');
+
+
+// Define a hardcoded set of credentials
+const users = [
+  { username: 'admin', password: 'password123' },
+  // Add more users here if needed
+];
+
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/login', (req, res) => {
+  res.render('login');
 });
 
-
-// Handle login form submission
 app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  if (username === 'admin' && password === '123456') {
-    res.render('admin-panel.ejs');
+  // Check if the provided credentials match any user in the predefined list
+  const user = users.find(user => user.username === username && user.password === password);
+
+  if (user) {
+      // Authentication successful; redirect to the dashboard
+      res.redirect('/response');
   } else {
-    res.send('Invalid login credentials. Please try again.');
+      // Authentication failed; redirect back to the login page with an error message
+      res.redirect('/login?error=1');
   }
+});
+
+app.get('/dashboard', (req, res) => {
+  res.render('constituency.ejs');
 });
 
 

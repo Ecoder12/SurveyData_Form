@@ -127,10 +127,29 @@
       #page-numbers button:hover {
         background-color: #555;
       }
+      button#filter-button {
+    background-color: #3498db;
+    /* color: white; */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+a {
+    color: white;
+    text-decoration: none;
+}
+.logout{
+    background-color: red !important;
+}
+
+
     </style>
   </head>
   <body>
     <h1>Constituency Allocation</h1>
+    <button id="filter-button"><a href="https://surveycenter.naxtre.com/response">Response</a></button>
+        <button id="filter-button"><a href="https://surveycenter.naxtre.com/constituency_allocate">Allocate
+            Constituency</a></button>
+            <button id="filter-button" class="logout"><a href="https://surveycenter.naxtre.com/login">Logout</a></button>
     <table>
       <tr>
         <th>Value</th>
@@ -153,7 +172,7 @@
       <% }); %>
     </table>
     <div id="pagination-container">
-      <button id="prev-button"><<</button>
+      <button id="prev-button">>>></button>
       <span id="page-numbers"></span>
       <button id="next-button">>></button>
     </div>

@@ -9,6 +9,11 @@
         /* Light blue background */
       }
 
+a {
+    color: white;
+    text-decoration: none;
+}
+
       button {
         background-color: #3498db;
         color: white;
@@ -105,6 +110,13 @@
       #page-numbers button:hover {
         background-color: #555;
       }
+      button {
+        margin-top: 20px;
+      }
+      .logout{
+    background-color: red !important;
+}
+
     </style>
   </head>
 
@@ -117,8 +129,12 @@
         <label for="end-date">End Date:</label>
         <input type="date" id="end-date" />
         <button id="filter-button">Apply Filter</button>
+        <button id="filter-button"><a href="https://surveycenter.naxtre.com/response">Response</a></button>
+        <button id="filter-button"><a href="https://surveycenter.naxtre.com/constituency_allocate">Allocate
+            Constituency</a></button>
+            <button id="filter-button" class="logout"><a href="https://surveycenter.naxtre.com/login">Logout</a></button>
       </div>
-
+     
       <table>
         <thead>
           <tr>
