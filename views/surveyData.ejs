@@ -9,10 +9,10 @@
         /* Light blue background */
       }
 
-a {
-    color: white;
-    text-decoration: none;
-}
+      a {
+        color: white;
+        text-decoration: none;
+      }
 
       button {
         background-color: #3498db;
@@ -113,10 +113,26 @@ a {
       button {
         margin-top: 20px;
       }
-      .logout{
-    background-color: red !important;
-}
+      .logout {
+        background-color: red !important;
+      }
+      .export-csv {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        z-index: 1;
+      }
 
+      .export-csv:hover {
+        background-color: #45a049;
+      }
     </style>
   </head>
 
@@ -129,12 +145,20 @@ a {
         <label for="end-date">End Date:</label>
         <input type="date" id="end-date" />
         <button id="filter-button">Apply Filter</button>
-        <button id="filter-button"><a href="https://surveycenter.naxtre.com/response">Response</a></button>
-        <button id="filter-button"><a href="https://surveycenter.naxtre.com/constituency_allocate">Allocate
-            Constituency</a></button>
-            <button id="filter-button" class="logout"><a href="https://surveycenter.naxtre.com/login">Logout</a></button>
+        <button id="filter-button">
+          <a href="https://surveycenter.naxtre.com/response">Response</a>
+        </button>
+        <button id="filter-button">
+          <a href="https://surveycenter.naxtre.com/constituency_allocate"
+            >Allocate Constituency</a
+          >
+        </button>
+        <button id="filter-button" class="logout">
+          <a href="https://surveycenter.naxtre.com/login">Logout</a>
+        </button>
+        <button id="export-csv-button" class="export-csv">Export CSV</button>
       </div>
-     
+
       <table>
         <thead>
           <tr>
@@ -261,26 +285,33 @@ a {
           navigateToPage(currentPage + 1);
         });
       </script>
-     <script>
-        document.getElementById("filter-button").addEventListener("click", applyFilter);
-      
+      <script>
+        document
+          .getElementById("filter-button")
+          .addEventListener("click", applyFilter);
+
         function applyFilter() {
-          const startDate = new Date(document.getElementById("start-date").value);
+          const startDate = new Date(
+            document.getElementById("start-date").value
+          );
           const endDate = new Date(document.getElementById("end-date").value);
-      
+
           if (!startDate || !endDate || startDate > endDate) {
             alert("Invalid date range. Please select valid dates.");
             return;
           }
-      
+
           const table = document.querySelector("table");
           const tableRows = table.querySelectorAll("tr");
-      
+
           tableRows.forEach((row) => {
             const timestampCell = row.querySelector("[data-label='Timestamp']");
             if (timestampCell) {
               const timestamp = new Date(timestampCell.textContent);
-              if (timestamp >= startDate && timestamp <= new Date(endDate.getTime() + 24 * 60 * 60 * 1000)) {
+              if (
+                timestamp >= startDate &&
+                timestamp <= new Date(endDate.getTime() + 24 * 60 * 60 * 1000)
+              ) {
                 row.style.display = "table-row";
               } else {
                 row.style.display = "none";
@@ -289,9 +320,51 @@ a {
           });
         }
       </script>
+      <script>
+        function extractAllTableData() {
+          const table = document.querySelector("table");
+          const rows = table.querySelectorAll("tr");
+          const allData = [];
+          rows.forEach((row) => {
+            const rowData = [];
+            const cells = row.querySelectorAll("td");
+            cells.forEach((cell) => {
+              rowData.push(cell.textContent.trim());
+            });
+            allData.push(rowData.join(","));
+          });
+          console.log("allData>>>>>>", allData);
+          return allData.join("\n");
+        }
+
+        // Function to export the table data to CSV
+        function exportTableToCSV(filename) {
+          const csvContent = extractAllTableData();
+          console.log("csvContent>>>>>>", csvContent);
+          // Create a CSV blob
+          const csv = "data:text/csv;charset=utf-8," + csvContent;
+          const csvBlob = new Blob([csv], { type: "text/csv" });
+
+          // Create a download link and trigger the download
+          const csvUrl = URL.createObjectURL(csvBlob);
+          const a = document.createElement("a");
+          a.href = csvUrl;
+          a.download = filename + ".csv";
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(csvUrl);
+        }
+
+        document
+          .getElementById("export-csv-button")
+          .addEventListener("click", function () {
+            exportTableToCSV("table_data"); 
+          });
+      </script>
+     
       
     </div>
   </body>
 </html>
- 
- 
