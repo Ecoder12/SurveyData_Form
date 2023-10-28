@@ -177,7 +177,7 @@ a {
       <button id="next-button">>></button>
     </div>
 
-    <script>
+   <script>
       const table = document.querySelector("table");
       const tableRows = table.querySelectorAll("tr");
       const rowsPerPage = 10;
@@ -196,24 +196,20 @@ a {
         }
 
         table.innerHTML = `
-                
-                ${tableHtml}
-            `;
+          ${tableHtml}
+        `;
       }
 
       function navigateToPage(page) {
         if (page < 1) page = 1;
-        if (page > Math.ceil(tableRows.length / rowsPerPage))
-          page = Math.ceil(tableRows.length / rowsPerPage);
+        if (page > Math.ceil(tableRows.length / rowsPerPage)) page = Math.ceil(tableRows.length / rowsPerPage);
         currentPage = page;
         displayTable(currentPage);
       }
 
       displayTable(currentPage);
 
-      const paginationContainer = document.getElementById(
-        "pagination-container"
-      );
+      const paginationContainer = document.getElementById("pagination-container");
       const totalPages = Math.ceil(tableRows.length / rowsPerPage);
       const pageNumbers = document.getElementById("page-numbers");
       const prevButton = document.getElementById("prev-button");
@@ -237,6 +233,27 @@ a {
 
       nextButton.addEventListener("click", () => {
         navigateToPage(currentPage + 1);
+      });
+
+      // Event delegation for checkbox clicks
+      table.addEventListener("change", (event) => {
+        if (event.target.type === "checkbox") {
+          const value = event.target.getAttribute("data-value");
+          const active = event.target.checked ? 1 : 0;
+
+          // Call the update API to change the 'is_active' value
+          fetch(`/update/${value}/${active}`, { method: "GET" })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                // Update the UI or provide feedback as needed
+                console.log(`Updated is_active for value ${value} to ${active}`);
+              }
+            })
+            .catch((error) => {
+              console.error("Error updating is_active:", error);
+            });
+        }
       });
     </script>
 

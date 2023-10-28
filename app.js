@@ -40,7 +40,6 @@ app.get('/survey-form', (req, res) => {
 app.post('/submit', async (req, res) => {
   const {
     timestamp,
-    Constituency,
     mobile_number,
     gender,
     urban_or_rural,
@@ -58,6 +57,8 @@ app.post('/submit', async (req, res) => {
 
   const othercaste = req.body.othercaste;
 
+  const otherConstituency = req.body.otherconstituency;
+
   if (otherOccupation === undefined || otherOccupation === '') {
     var occupation = req.body.occupation;
   } else {
@@ -70,6 +71,11 @@ app.post('/submit', async (req, res) => {
     var caste = othercaste;
   }
 
+  if (otherConstituency === undefined || otherConstituency === '') {
+    var Constituency = req.body.Constituency;
+  } else {
+    var Constituency = otherConstituency;
+  }
 
   try {
     await sql.connect(config);

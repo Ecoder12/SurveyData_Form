@@ -278,9 +278,14 @@
     </select> -->
 
     <label for="Constituency">Select Your Assembly</label>
-    <select name="Constituency" id="Constituency" required>
+    <div id="constituencyField">
+    <select name="Constituency" id="Constituency" required onchange="toggleConOtherField()">
     </select>
-
+  </div>
+ <div id="otherconstituencyField" style="display: none;">
+      <label for="otherconstituency">Other Constituency:</label>
+      <input type="text" name="otherconstituency" id="otherconstituency">
+    </div>
 
 
 
@@ -450,6 +455,28 @@
       }
     }
   </script>
+
+
+<script>
+  function toggleConOtherField() {
+    var constituencySelect = document.getElementById("Constituency");
+    var constituencyField = document.getElementById("constituencyField");
+    var otherConstituencyField = document.getElementById("otherconstituencyField");
+    var otherConstituencyInput = document.getElementById("otherconstituency");
+
+    if (constituencySelect.value === "Others") {
+      constituencyField.style.display = "none";
+      otherConstituencyField.style.display = "block";
+      otherConstituencyInput.setAttribute("required", "required");
+    } else {
+      constituencyField.style.display = "block";
+      otherConstituencyField.style.display = "none";
+      otherConstituencyInput.removeAttribute("required");
+      otherConstituencyInput.value = null; // Set the default value to null when not "Others" is selected
+    }
+  }
+</script>
+
 
   <script>
     function toggleOthercasteField() {
