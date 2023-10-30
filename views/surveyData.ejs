@@ -126,11 +126,28 @@
         font-size: 16px;
         cursor: pointer;
         position: absolute;
-        right: 20px;
+        right: 29px;
         z-index: 1;
       }
 
       .export-csv:hover {
+        background-color: #45a049;
+      }
+      .all-export-csv {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+        position: absolute;
+        right: 136px;
+        z-index: 1;
+      }
+
+      .all-export-csv:hover {
         background-color: #45a049;
       }
     </style>
@@ -155,6 +172,15 @@
         </button>
         <button id="filter-button" class="logout">
           <a href="https://surveycenter.naxtre.com/login">Logout</a>
+        </button>
+        <label for="rows-per-page">Rows per page:</label>
+        <select id="rows-per-page">
+          <option value="10">10</option>
+          <option value="50">50</option>
+          <option value="all">All</option>
+        </select>
+        <button id="all-export-csv-button" class="all-export-csv">
+          All Data Export
         </button>
         <button id="export-csv-button" class="export-csv">Export CSV</button>
       </div>
@@ -226,7 +252,7 @@
       <script>
         const table = document.querySelector("table");
         const tableRows = table.querySelectorAll("tr");
-        const rowsPerPage = 10;
+        let rowsPerPage = 10; // Default to 10 rows per page
         let currentPage = 1;
 
         function displayTable(page) {
@@ -234,23 +260,20 @@
           const end = start + rowsPerPage;
 
           // Create HTML for the table rows to display
-          let tableHtml = "";
-          for (let i = start; i < end; i++) {
+          let tableHtml = tableRows[0].outerHTML; // Include the table header
+          for (let i = start + 1; i < end; i++) {
             if (tableRows[i]) {
               tableHtml += tableRows[i].outerHTML;
             }
           }
-
-          table.innerHTML = `
-                 
-                    ${tableHtml}
-                `;
+          table.innerHTML = tableHtml;
         }
 
         function navigateToPage(page) {
           if (page < 1) page = 1;
-          if (page > Math.ceil(tableRows.length / rowsPerPage))
+          if (page > Math.ceil(tableRows.length / rowsPerPage)) {
             page = Math.ceil(tableRows.length / rowsPerPage);
+          }
           currentPage = page;
           displayTable(currentPage);
         }
@@ -264,6 +287,7 @@
         const pageNumbers = document.getElementById("page-numbers");
         const prevButton = document.getElementById("prev-button");
         const nextButton = document.getElementById("next-button");
+        const rowsPerPageSelect = document.getElementById("rows-per-page");
 
         function updatePageNumbers() {
           pageNumbers.innerHTML = "";
@@ -284,6 +308,108 @@
         nextButton.addEventListener("click", () => {
           navigateToPage(currentPage + 1);
         });
+
+        rowsPerPageSelect.addEventListener("change", (event) => {
+          const selectedValue = event.target.value;
+          if (selectedValue === "all") {
+            rowsPerPage = tableRows.length - 1; // Display all rows
+          } else {
+            rowsPerPage = parseInt(selectedValue, 10);
+          }
+          currentPage = 1; // Reset to the first page when changing rows per page
+          displayTable(currentPage);
+          updatePageNumbers();
+        });
+
+        function applyFilter() {
+          const startDate = new Date(
+            document.getElementById("start-date").value
+          );
+          const endDate = new Date(document.getElementById("end-date").value);
+
+          if (!startDate || !endDate || startDate > endDate) {
+            alert("Invalid date range. Please select valid dates.");
+            return;
+          }
+
+          tableRows.forEach((row) => {
+            const timestampCell = row.querySelector("[data-label='Timestamp']");
+            if (timestampCell) {
+              const timestamp = new Date(timestampCell.textContent);
+              if (
+                timestamp >= startDate &&
+                timestamp <= new Date(endDate.getTime() + 24 * 60 * 60 * 1000)
+              ) {
+                row.style.display = "table-row";
+              } else {
+                row.style.display = "none";
+              }
+            }
+          });
+        }
+
+        function extractVisibleTableData() {
+          const table = document.querySelector("table");
+          const rows = table.querySelectorAll("tr");
+          const visibleData = [];
+          rows.forEach((row) => {
+            if (row.style.display !== "none") {
+              const rowData = [];
+              const cells = row.querySelectorAll("td");
+              cells.forEach((cell) => {
+                rowData.push(cell.textContent.trim());
+              });
+              visibleData.push(rowData.join(","));
+            }
+          });
+          return visibleData.join("\n");
+        }
+
+        function exportVisibleTableToCSV(filename) {
+          const table = document.querySelector("table");
+          const headers = Array.from(table.querySelectorAll("th")).map((th) =>
+            th.textContent.trim()
+          );
+          const visibleData = [headers];
+
+          const rows = table.querySelectorAll("tr");
+          rows.forEach((row) => {
+            if (row.style.display !== "none") {
+              const rowData = [];
+              const cells = row.querySelectorAll("td");
+              cells.forEach((cell) => {
+                rowData.push(cell.textContent.trim());
+              });
+              visibleData.push(rowData);
+            }
+          });
+
+          const csvContent = visibleData.map((row) => row.join(",")).join("\n");
+
+          // Remove "data:text/csv;charset=utf-8" from the csv URL
+          const csv = csvContent;
+          const csvBlob = new Blob([csv], { type: "text/csv" });
+
+          const csvUrl = URL.createObjectURL(csvBlob);
+          const a = document.createElement("a");
+          a.href = csvUrl;
+          a.download = filename + ".csv";
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(csvUrl);
+        }
+
+        document
+          .getElementById("filter-button")
+          .addEventListener("click", applyFilter);
+
+        document
+          .getElementById("export-csv-button")
+          .addEventListener("click", function () {
+            exportVisibleTableToCSV("table_data");
+          });
       </script>
       <script>
         document
@@ -321,50 +447,77 @@
         }
       </script>
       <script>
-        function extractAllTableData() {
-          const table = document.querySelector("table");
-          const rows = table.querySelectorAll("tr");
-          const allData = [];
-          rows.forEach((row) => {
-            const rowData = [];
-            const cells = row.querySelectorAll("td");
-            cells.forEach((cell) => {
-              rowData.push(cell.textContent.trim());
+        function exportAllDataToCSV() {
+          fetch("http://3.6.200.239:8500/SurveyData") // Replace with your server-side endpoint
+            .then((response) => response.json())
+            .then((data) => {
+              const csvContent = prepareCSVContent(data);
+              exportToCSVFile(csvContent, "table_data");
+            })
+            .catch((error) => {
+              console.error("Error fetching data: ", error);
             });
-            allData.push(rowData.join(","));
-          });
-          console.log("allData>>>>>>", allData);
-          return allData.join("\n");
         }
 
-        // Function to export the table data to CSV
-        function exportTableToCSV(filename) {
-          const csvContent = extractAllTableData();
-          console.log("csvContent>>>>>>", csvContent);
-          // Create a CSV blob
-          const csv = "data:text/csv;charset=utf-8," + csvContent;
-          const csvBlob = new Blob([csv], { type: "text/csv" });
+        function prepareCSVContent(data) {
+          const headers = [
+            "ID",
+            "Timestamp",
+            "Mobile Number",
+            "Gender",
+            "Urban_or_Rural",
+            "Upcoming_Election_Party",
+            "Party_2018",
+            "Satisfaction_with_CM",
+            "Satisfaction_with_MLA",
+            "Occupation",
+            "Caste",
+            "Agent_ID",
+            "Remarks_if_any",
+          ];
+          const rows = data.map((entry) => {
+            return [
+              entry.data_text,
+              entry.Id,
+              entry.Timestamp,
+              entry.Mobile_Number,
+              entry.Gender,
+              entry.Urban_or_Rural,
+              entry.Upcoming_Election_Party,
+              entry.Party_2018,
+              entry.Satisfaction_with_CM,
+              entry.Satisfaction_with_MLA,
+              entry.Occupation,
+              entry.Caste,
+              entry.Agent_ID,
+              entry.Remarks_if_any,
+            ];
+          });
+          return [headers, ...rows].map((row) => row.join(",")).join("\n");
+        }
 
-          // Create a download link and trigger the download
-          const csvUrl = URL.createObjectURL(csvBlob);
+        function exportToCSVFile(csvContent, filename) {
+          const csv = "data:text/csv;charset=utf-8," + csvContent;
+          const csvBlob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+
           const a = document.createElement("a");
-          a.href = csvUrl;
+          a.href = URL.createObjectURL(csvBlob);
           a.download = filename + ".csv";
           a.style.display = "none";
+
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-          URL.revokeObjectURL(csvUrl);
+
+          URL.revokeObjectURL(a.href);
         }
 
         document
-          .getElementById("export-csv-button")
+          .getElementById("all-export-csv-button")
           .addEventListener("click", function () {
-            exportTableToCSV("table_data"); 
+            exportAllDataToCSV();
           });
       </script>
-     
-      
     </div>
   </body>
 </html>
