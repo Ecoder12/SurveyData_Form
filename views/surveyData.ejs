@@ -448,7 +448,7 @@
       </script>
       <script>
         function exportAllDataToCSV() {
-          fetch("http://3.6.200.239:8500/SurveyData") // Replace with your server-side endpoint
+          fetch("https://surveycenter.naxtre.com/SurveyData") // Replace with your server-side endpoint
             .then((response) => response.json())
             .then((data) => {
               const csvContent = prepareCSVContent(data);
