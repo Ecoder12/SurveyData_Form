@@ -31,6 +31,10 @@ app.get('/', (req, res) => {
   res.render('form');
 });
 
+app.get('/exitpoll', (req, res) => {
+  res.render('exit');
+});
+
 
 app.get('/survey-form', (req, res) => {
   res.render('form');
@@ -136,6 +140,72 @@ app.post('/submit', async (req, res) => {
   }
 });
 
+app.post('/exit', async (req, res) => {
+  const {
+    timestamp,
+    mobile_number,
+    gender,
+    urban_or_rural,
+    upcoming_election_party,
+    agent_id,
+    remarks,
+  } = req.body;
+
+ 
+  const otherConstituency = req.body.otherconstituency;
+
+ 
+  if (otherConstituency === undefined || otherConstituency === '') {
+    var Constituency = req.body.Constituency;
+  } else {
+    var Constituency = otherConstituency;
+  }
+
+  try {
+    await sql.connect(config);
+    const request = new sql.Request();
+    request.input('timestamp', sql.NVarChar, timestamp);
+    request.input('Constituency', sql.NVarChar, Constituency);
+    request.input('mobile_number', sql.VarChar, mobile_number);
+    request.input('gender', sql.NVarChar, gender);
+    request.input('urban_or_rural', sql.NVarChar, urban_or_rural);
+    request.input('upcoming_election_party', sql.NVarChar, upcoming_election_party);
+    request.input('agent_id', sql.NVarChar, agent_id);
+    request.input('remarks', sql.NVarChar, remarks);
+
+    const query = `
+      INSERT INTO SurveyData_form_exitpoll (
+        Timestamp,
+        Constituency,
+        Mobile_Number, 
+        Gender, 
+        Urban_or_Rural, 
+        Upcoming_Election_Party,
+        Agent_ID, 
+        Remarks_if_any
+      ) 
+      VALUES (
+        @timestamp,
+        @Constituency,
+        @mobile_number, 
+        @gender,
+        @urban_or_rural, 
+        @upcoming_election_party,
+        @agent_id, 
+        @remarks
+      )`;
+
+    await request.query(query);
+    console.log('Data inserted successfully.');
+    res.redirect('/');
+  } catch (error) {
+    console.error(error);
+  } finally {
+    sql.close();
+  }
+});
+
+
 
 app.get('/SurveyData', async (req, res) => {
 
@@ -157,6 +227,25 @@ app.get('/SurveyData', async (req, res) => {
   }
 });
 
+app.get('/SurveyData_exit', async (req, res) => {
+
+
+  try {
+    await sql.connect(config);
+    const request = new sql.Request();
+
+
+    const query = `select * from SurveyData_form_exitpoll`;
+
+    const result = await request.query(query);
+    console.log('DataFetched Successfully', result);
+    res.json(result.recordset);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    sql.close();
+  }
+});
 
 
 
@@ -192,6 +281,25 @@ app.get('/response', async (req, res) => {
 
     // Render the EJS template and pass the data to it
     res.render('surveyData.ejs', { data: result.recordset });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    sql.close();
+  }
+});
+
+app.get('/exit-poll', async (req, res) => {
+  try {
+    await sql.connect(config);
+    const request = new sql.Request();
+
+    const query = `select * from SurveyData_form_exitpoll`;
+
+    const result = await request.query(query);
+    console.log('Data Fetched Successfully', result);
+
+    // Render the EJS template and pass the data to it
+    res.render('exit_res.ejs', { data: result.recordset });
   } catch (error) {
     console.error(error);
   } finally {
@@ -310,6 +418,31 @@ app.post('/deleteSurveyData', async (req, res) => {
     // Handle errors here
   }
 });
+
+app.post('/deleteSurveyData_exit', async (req, res) => {
+  try {
+    const id = req.body.id;
+
+    console.log(id);
+
+    // Connect to the database
+    await sql.connect(config);
+
+    // Form the SQL query
+    const query = `DELETE FROM SurveyData_form_exitpoll where id = ${id}`;
+    console.log('SQL Query:', query);
+
+    // Update the 'is_active' flag for the specified constituencies
+    const result = await sql.query(query);
+
+    res.redirect('/exit-poll'); // Redirect back to the SurveyData page
+  } catch (error) {
+    console.error(error);
+    // Handle errors here
+  }
+});
+
+
 
 
 app.get('/constituency-allocation', async (req, res) => {
