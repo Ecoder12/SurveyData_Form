@@ -144,60 +144,37 @@ app.post('/exit', async (req, res) => {
   const {
     timestamp,
     mobile_number,
-    gender,
-    urban_or_rural,
     upcoming_election_party,
-    agent_id,
-    remarks,
+    party_2018,
   } = req.body;
 
- 
-  const otherConstituency = req.body.otherconstituency;
-
- 
-  if (otherConstituency === undefined || otherConstituency === '') {
-    var Constituency = req.body.Constituency;
-  } else {
-    var Constituency = otherConstituency;
-  }
 
   try {
     await sql.connect(config);
     const request = new sql.Request();
     request.input('timestamp', sql.NVarChar, timestamp);
-    request.input('Constituency', sql.NVarChar, Constituency);
     request.input('mobile_number', sql.VarChar, mobile_number);
-    request.input('gender', sql.NVarChar, gender);
-    request.input('urban_or_rural', sql.NVarChar, urban_or_rural);
     request.input('upcoming_election_party', sql.NVarChar, upcoming_election_party);
-    request.input('agent_id', sql.NVarChar, agent_id);
-    request.input('remarks', sql.NVarChar, remarks);
+    request.input('party_2018', sql.NVarChar, party_2018);
+
 
     const query = `
       INSERT INTO SurveyData_form_exitpoll (
         Timestamp,
-        Constituency,
-        Mobile_Number, 
-        Gender, 
-        Urban_or_Rural, 
+        Mobile_Number,
         Upcoming_Election_Party,
-        Agent_ID, 
-        Remarks_if_any
+        party_2018
       ) 
       VALUES (
         @timestamp,
-        @Constituency,
-        @mobile_number, 
-        @gender,
-        @urban_or_rural, 
+        @mobile_number,
         @upcoming_election_party,
-        @agent_id, 
-        @remarks
+        @party_2018
       )`;
 
     await request.query(query);
     console.log('Data inserted successfully.');
-    res.redirect('/');
+    res.redirect('/exitpoll');
   } catch (error) {
     console.error(error);
   } finally {

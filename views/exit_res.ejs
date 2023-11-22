@@ -198,13 +198,10 @@
             <th data-label="ID">ID</th>
             <th data-label="Timestamp">Timestamp</th>
             <th data-label="Mobile Number">Mobile Number</th>
-            <th data-label="Gender">Gender</th>
-            <th data-label="Urban or Rural">Urban or Rural</th>
             <th data-label="Upcoming Election Party">
               Upcoming Election Party
             </th>
-            <th data-label="Agent ID">Agent ID</th>
-            <th data-label="Remarks (if any)">Remarks (if any)</th>
+            <th data-label="Party 2018">Party 2018</th>
             <th data-label="Action">Action</th>
             <!-- Add a new column for the Delete button -->
           </tr>
@@ -217,19 +214,16 @@
             <td data-label="ID"><%= entry.Id %></td>
             <td data-label="Timestamp"><%= entry.Timestamp %></td>
             <td data-label="Mobile Number"><%= entry.Mobile_Number %></td>
-            <td data-label="Gender"><%= entry.Gender %></td>
-            <td data-label="Urban or Rural"><%= entry.Urban_or_Rural %></td>
             <td data-label="Upcoming Election Party">
               <%= entry.Upcoming_Election_Party %>
             </td>
-            <td data-label="Agent ID"><%= entry.Agent_ID %></td>
-            <td data-label="Remarks (if any)"><%= entry.Remarks_if_any %></td>
+            <td data-label="Party 2018"><%= entry.Party_2018 %></td>
             <td data-label="Action">
-              <form action="/deleteSurveyData_exit" method="POST">
-                <input type="hidden" name="id" value="<%= entry.Id %>" />
-                <button type="submit">Delete</button>
-              </form>
-            </td>
+                <form action="/deleteSurveyData_exit" method="POST">
+                  <input type="hidden" name="id" value="<%= entry.Id %>" />
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
           </tr>
           <% }); %>
         </tbody>
